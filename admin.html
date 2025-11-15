@@ -3,18 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel V3</title>
+    <title>Admin Panel - Borneo Fresh Fruits</title>
     <style>
-        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; max-width: 800px; margin: 0 auto; }
-        .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; margin-top: 50px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; margin-top: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .app-box { display: none; }
         input, select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
         button { width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; background: #2c3e50; color: white; }
         .btn-save { background: #27ae60; margin-top: 10px; }
-        .product-item { background: white; padding: 10px; margin-bottom: 10px; border-radius: 8px; display: flex; gap: 10px; align-items: center; }
-        .thumb-img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
-        .upload-area { border: 2px dashed #ccc; padding: 15px; text-align: center; margin-bottom: 10px; cursor: pointer; background: #fff; }
-        #preview-box img { max-height: 150px; margin-top: 10px; }
+        .product-item { background: white; padding: 10px; margin-bottom: 10px; border-radius: 8px; display: flex; gap: 10px; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .thumb-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; background: #eee; border: 1px solid #ddd; }
+        .upload-area { border: 2px dashed #ccc; padding: 15px; text-align: center; margin-bottom: 10px; cursor: pointer; background: #fff; border-radius: 8px; }
+        .upload-area:hover { background-color: #e8f5e9; border-color: #27ae60; }
+        #preview-box img { max-height: 150px; margin-top: 10px; border-radius: 8px; }
+        
+        /* Style Butang Keluar Baru */
+        .btn-logout { 
+            background: #c0392b !important; 
+            color: white; 
+            width: auto !important; 
+            padding: 8px 20px !important; 
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -26,13 +36,13 @@
     </div>
 
     <div id="app-screen" class="app-box">
-        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-            <h2>📦 Urus Stok</h2>
-            <button onclick="logout()" style="width:auto; background:#777; padding:5px 15px;">Keluar</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 style="margin:0;">📦 Urus Stok</h2>
+            <button onclick="logout()" class="btn-logout">Keluar ➜ Kedai</button>
         </div>
         
-        <div style="background:white; padding:20px; border-radius:12px; margin-bottom:20px;">
-            <h3>Tambah Produk</h3>
+        <div style="background:white; padding:20px; border-radius:12px; margin-bottom:20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <h3 style="margin-top:0;">Tambah Produk</h3>
             <input type="text" id="p-name" placeholder="Nama Produk">
             <input type="text" id="p-desc" placeholder="Info (Cth: Manis)">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
@@ -49,11 +59,12 @@
             <button class="btn-save" onclick="addProduct()">+ TAMBAH</button>
         </div>
 
-        <div id="loading-msg" style="display:none; text-align:center; color:orange; font-weight:bold;">Sedang proses...</div>
+        <div id="loading-msg" style="display:none; text-align:center; color:#e67e22; font-weight:bold; margin-bottom:10px;">Sedang proses...</div>
         <div id="product-list"></div>
     </div>
 
 <script>
+    // --- SETTING KHAS UNTUK TUAN ---
     const GITHUB_USERNAME = "kamkikorich"; 
     const REPO_NAME = "borneoHubFruit";    
     const FILE_PATH = "stok.js";
@@ -76,7 +87,12 @@
         loadFromGitHub();
     }
 
-    function logout() { sessionStorage.removeItem('gh_token'); location.reload(); }
+    // --- FUNGSI KELUAR YANG DIPERBAIKI ---
+    function logout() { 
+        sessionStorage.removeItem('gh_token'); // Buang kunci
+        window.location.href = "index.html";   // Balik ke Kedai
+    }
+    // -------------------------------------
 
     function handleFile(input) {
         const file = input.files[0];
@@ -113,7 +129,7 @@
             const data = await response.json();
             fileSha = data.sha; 
             
-            // SMART CLEANER (Cari [ dan ] sahaja)
+            // SMART CLEANER
             const rawContent = atob(data.content);
             const firstBracket = rawContent.indexOf('[');
             const lastBracket = rawContent.lastIndexOf(']');
@@ -130,6 +146,8 @@
 
     async function saveToGitHub() {
         document.getElementById('loading-msg').style.display = 'block';
+        document.getElementById('loading-msg').innerText = "Sedang upload... Jangan tutup!";
+
         const token = sessionStorage.getItem('gh_token');
         const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
         
@@ -158,8 +176,10 @@
         document.getElementById('product-list').innerHTML = products.map((p, i) => `
             <div class="product-item">
                 <img src="${p.img}" class="thumb-img" onerror="this.src='https://via.placeholder.com/50'">
-                <div style="flex-grow:1;"><strong>${p.name}</strong><br>RM${p.price}</div>
-                <button onclick="delProduct(${i})" style="background:#c0392b; width:auto; padding:5px 10px;">Hapus</button>
+                <div style="flex-grow:1;">
+                    <strong>${p.name}</strong><br>RM${p.price}
+                </div>
+                <button onclick="delProduct(${i})" style="background:#c0392b; color:white; width:auto; padding:5px 10px; border:none; border-radius:4px; cursor:pointer;">Hapus</button>
             </div>
         `).join('');
     }
