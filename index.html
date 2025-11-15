@@ -3,86 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Borneo Fresh Fruits | Pemborong Sabah</title>
+    <title>BorneoShop | Buah Sabah</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f8f9fa; padding-bottom: 60px; }
+        /* --- SHOPEE STYLE CSS --- */
+        :root {
+            --shopee-orange: #ee4d2d;
+            --shopee-bg: #f5f5f5;
+            --text-black: #222;
+            --text-grey: #757575;
+        }
+
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; background: var(--shopee-bg); padding-bottom: 70px; }
         
-        /* Header */
-        header { background: linear-gradient(to right, #1e8449, #27ae60); color: white; padding: 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h1 { margin: 0; font-size: 1.8rem; }
-        p { margin: 5px 0 0; opacity: 0.9; font-size: 0.9rem; }
+        /* Header Shopee Style */
+        header { background: var(--shopee-orange); color: white; padding: 15px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .search-bar { background: white; border-radius: 2px; padding: 8px; flex-grow: 1; color: #999; font-size: 0.9rem; }
+        .cart-icon { font-size: 1.5rem; }
+
+        /* Banner */
+        .banner { background: #fff; padding: 10px; margin-bottom: 10px; }
+        .banner img { width: 100%; border-radius: 5px; }
+
+        /* Kategori/Filter */
+        .categories { display: flex; overflow-x: auto; background: white; padding: 10px; gap: 15px; margin-bottom: 10px; }
+        .cat-item { text-align: center; min-width: 60px; font-size: 0.8rem; color: var(--text-grey); }
+        .cat-icon { width: 45px; height: 45px; background: #eee; border-radius: 50%; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
 
         /* Grid Produk */
-        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
-        .product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .section-title { padding: 10px; background: white; color: var(--shopee-orange); font-weight: bold; border-bottom: 1px solid #eee; text-transform: uppercase; font-size: 0.9rem; }
         
-        /* Kad Produk */
-        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s; }
-        .card:hover { transform: translateY(-5px); }
-        .card img { width: 100%; height: 150px; object-fit: cover; background: #eee; }
-        .card-body { padding: 12px; }
-        .p-name { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; color: #333; }
-        .p-desc { font-size: 0.85rem; color: #666; margin-bottom: 10px; height: 35px; overflow: hidden; }
-        .p-price { color: #1e8449; font-weight: bold; font-size: 1.2rem; margin-bottom: 10px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .product-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px; }
         
-        /* Butang WhatsApp */
-        .btn-wa { display: block; background: #25D366; color: white; text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.9rem; }
-        .btn-wa:hover { background: #1ebd5b; }
+        /* Kad Produk Shopee */
+        .card { background: white; border-radius: 2px; overflow: hidden; transition: transform 0.1s; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.1); cursor: pointer; }
+        .card:active { opacity: 0.8; }
+        
+        .card img { width: 100%; height: 150px; object-fit: cover; background: #fafafa; }
+        
+        .card-body { padding: 8px; }
+        .p-name { font-size: 0.85rem; color: var(--text-black); margin-bottom: 5px; line-height: 1.2em; height: 2.4em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        
+        .tags { display: flex; gap: 5px; margin-bottom: 5px; }
+        .tag-local { background: #ee4d2d; color: white; font-size: 0.6rem; padding: 1px 4px; border-radius: 2px; }
+        .tag-ship { border: 1px solid #00bfa5; color: #00bfa5; font-size: 0.6rem; padding: 1px 4px; }
 
-        .loading { text-align: center; padding: 20px; color: #777; }
+        .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 5px; }
+        .p-price { color: var(--shopee-orange); font-weight: 500; font-size: 1rem; }
+        .p-price small { font-size: 0.7rem; }
+        .p-sold { font-size: 0.7rem; color: var(--text-grey); }
 
-        /* Footer Admin Link */
-        footer { text-align: center; padding: 30px; color: #999; font-size: 0.8rem; }
-        footer a { color: #999; text-decoration: none; border: 1px solid #ddd; padding: 5px 10px; border-radius: 20px; transition: 0.3s; }
-        footer a:hover { background: #ddd; color: #333; }
+        /* Bottom Nav Bar */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #eee; display: flex; justify-content: space-around; padding: 8px 0; z-index: 100; max-width: 600px; margin: 0 auto; left: 0; right: 0;}
+        .nav-item { text-align: center; font-size: 0.7rem; color: var(--text-grey); flex: 1; }
+        .nav-item.active { color: var(--shopee-orange); }
+        .nav-icon { font-size: 1.2rem; display: block; margin-bottom: 2px; }
+
+        /* Link WhatsApp Halus */
+        .card-link { text-decoration: none; color: inherit; display: block; }
 
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Borneo Fresh 🍍</h1>
-    <p>Buah Segar Sabah & Penghantaran</p>
+    <div style="font-weight:bold;">BorneoShop</div>
+    <div class="search-bar">🔍 Cari Buah di sini...</div>
+    <div class="cart-icon">🛒</div>
 </header>
 
+<div class="categories">
+    <div class="cat-item"><div class="cat-icon">🔥</div>Laris</div>
+    <div class="cat-item"><div class="cat-icon">🍍</div>Tempatan</div>
+    <div class="cat-item"><div class="cat-icon">🚚</div>Borong</div>
+    <div class="cat-item"><div class="cat-icon">🍎</div>Import</div>
+    <div class="cat-item"><div class="cat-icon">🎫</div>Voucher</div>
+</div>
+
 <div class="container">
+    <div class="section-title">REKOMENDASI UNTUK ANDA</div>
     <div id="list" class="product-list">
-        <div class="loading">Sedang memuatkan stok terkini...</div>
+        <div style="text-align:center; width:200%; padding:20px; color:#999;">Loading...</div>
     </div>
 </div>
 
-<footer>
-    <p>&copy; 2025 Borneo Fresh Fruits</p>
-    <br>
-    <a href="admin.html">🔒 Admin Login</a>
-</footer>
+<div class="bottom-nav">
+    <div class="nav-item active">
+        <span class="nav-icon">🏠</span>Utama
+    </div>
+    <div class="nav-item">
+        <span class="nav-icon">🎥</span>Live
+    </div>
+    <div class="nav-item">
+        <span class="nav-icon">🔔</span>Notifikasi
+    </div>
+    <div class="nav-item">
+        <span class="nav-icon">👤</span>Saya
+    </div>
+    <div class="nav-item" onclick="window.location.href='admin.html'">
+        <span class="nav-icon">⚙️</span>
+    </div>
+</div>
 
 <script src="stok.js"></script>
-
 <script>
-    // NOMBOR TELEFON TUAN
+    // Tukar No WhatsApp Tuan
     const PHONE_NO = "60126119542"; 
 
     const listDiv = document.getElementById('list');
 
     function render() {
         if(typeof products === 'undefined' || products.length === 0) {
-            listDiv.innerHTML = "<p style='text-align:center; width:100%;'>Stok sedang dikemaskini.</p>";
+            listDiv.innerHTML = "<p style='padding:20px'>Stok sedang dikemaskini...</p>";
             return;
         }
 
         listDiv.innerHTML = products.map(p => `
+            <a href="https://wa.me/${PHONE_NO}?text=Hi BorneoShop, saya nak ${p.name}" class="card-link" target="_blank">
             <div class="card">
-                <img src="${p.img}" onerror="this.src='https://via.placeholder.com/300?text=Buah'">
+                <img src="${p.img}" onerror="this.src='https://via.placeholder.com/300?text=Produk'">
                 <div class="card-body">
-                    <div class="p-name">${p.name}</div>
-                    <div class="p-desc">${p.desc}</div>
-                    <div class="p-price">RM ${p.price} / ${p.unit}</div>
-                    <a href="https://wa.me/${PHONE_NO}?text=Salam, saya berminat dengan ${p.name} (${p.price}/${p.unit})" class="btn-wa" target="_blank">
-                        Beli WhatsApp 📲
-                    </a>
+                    <div class="p-name">${p.name} - ${p.desc}</div>
+                    <div class="tags">
+                        <span class="tag-local">Lokal</span>
+                        <span class="tag-ship">Free Shipping</span>
+                    </div>
+                    <div class="price-row">
+                        <div class="p-price"><small>RM</small>${p.price}</div>
+                        <div class="p-sold">12 sold</div>
+                    </div>
                 </div>
             </div>
+            </a>
         `).join('');
     }
 
