@@ -5,167 +5,255 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Borneo Fresh Fruits</title>
     <style>
-        /* --- TEMA PREMIUM SHOPEE --- */
-        :root { --primary: #ee4d2d; --bg: #f5f5f5; --card: #fff; --text: #333; }
+        /* --- TEMA PREMIUM (SHOPEE STYLE) --- */
+        :root {
+            --primary: #ee4d2d; /* Oren Shopee */
+            --bg: #f5f5f5;
+            --card: #ffffff;
+            --text: #333;
+        }
         body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 100px; }
 
-        /* Header */
+        /* HEADER */
         header { background: var(--primary); color: white; padding: 15px; position: sticky; top: 0; z-index: 99; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .search-bar { background: white; border-radius: 3px; padding: 8px 10px; flex-grow: 1; color: #ee4d2d; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; }
-        .cart-icon { font-size: 1.5rem; margin-left: 10px; position: relative; }
-        
-        /* Trust Badge */
-        .trust-bar { background: white; padding: 10px; display: flex; justify-content: space-around; font-size: 0.7rem; color: #555; border-bottom: 1px solid #eee; }
-        .trust-item span { color: var(--primary); font-weight: bold; }
+        .logo { font-weight: 800; font-size: 1.1rem; flex-grow: 1; }
+        .cart-icon { font-size: 1.5rem; position: relative; cursor: pointer; }
+        .cart-badge { position: absolute; top: -5px; right: -5px; background: white; color: var(--primary); font-size: 0.7rem; font-weight: bold; padding: 2px 6px; border-radius: 10px; border: 1px solid var(--primary); }
 
-        /* Grid Produk */
+        /* SENARAI PRODUK */
         .container { max-width: 600px; margin: 0 auto; padding: 10px; }
-        .section-title { color: var(--primary); font-weight: bold; margin: 10px 0; font-size: 1rem; border-left: 3px solid var(--primary); padding-left: 8px; }
         .product-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        /* Kad Produk */
-        .card { background: var(--card); border-radius: 5px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 100%; }
-        .img-box { width: 100%; height: 150px; background: #e0e0e0; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        /* KAD PRODUK */
+        .card { background: var(--card); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
         
-        .card-body { padding: 8px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .p-name { font-size: 0.9rem; margin-bottom: 5px; line-height: 1.2em; height: 2.4em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        /* Gambar Selamat (No Error) */
+        .img-box { width: 100%; height: 150px; background: #e0e0e0; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #999; font-size: 0.8rem; }
+        .real-img { width: 100%; height: 100%; object-fit: cover; display: none; }
+
+        .card-body { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .p-name { font-size: 0.95rem; margin-bottom: 5px; line-height: 1.2em; height: 2.4em; overflow: hidden; }
+        .p-desc { font-size: 0.75rem; color: #777; margin-bottom: 10px; }
+        
+        .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
         .p-price { color: var(--primary); font-weight: bold; font-size: 1rem; }
-        .p-unit { font-size: 0.7rem; color: #777; }
         
-        .btn-add { background: var(--primary); color: white; border: none; width: 100%; padding: 8px; border-radius: 3px; font-weight: bold; margin-top: 8px; cursor: pointer; }
-        .btn-add:active { opacity: 0.8; }
+        .btn-add { background: var(--primary); color: white; border: none; padding: 5px 12px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; font-weight: bold; }
+        .btn-add:active { opacity: 0.8; transform: scale(0.95); }
 
-        /* Footer Menu */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #eee; display: flex; justify-content: space-around; padding: 8px 0; z-index: 100; max-width: 600px; margin: 0 auto; left: 0; right: 0; }
-        .nav-item { text-align: center; font-size: 0.7rem; color: #777; flex: 1; text-decoration: none; }
-        .nav-icon { font-size: 1.4rem; display: block; margin-bottom: 2px; }
-        .admin-btn { color: #ee4d2d !important; }
+        /* FOOTER NAV */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #eee; display: flex; justify-content: space-around; padding: 10px 0; z-index: 90; max-width: 600px; margin: 0 auto; left: 0; right: 0; }
+        .nav-item { text-align: center; font-size: 0.7rem; color: #777; text-decoration: none; flex: 1; }
+        .nav-icon { font-size: 1.3rem; display: block; margin-bottom: 2px; }
 
-        /* Cart Floating Bar */
-        .cart-bar { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: #333; color: white; padding: 15px; border-radius: 50px; display: none; justify-content: space-between; align-items: center; z-index: 90; box-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: slideUp 0.3s; }
-        @keyframes slideUp { from { bottom: -50px; } to { bottom: 70px; } }
-        .btn-checkout { background: #25D366; color: white; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; }
+        /* --- MODAL BAKUL (POP-UP) --- */
+        .modal { display: none; position: fixed; z-index: 200; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); align-items: flex-end; }
+        .modal-content { background-color: white; width: 100%; max-width: 600px; margin: 0 auto; border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 20px; max-height: 80vh; overflow-y: auto; animation: slideUp 0.3s; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
+        .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #f9f9f9; padding-bottom: 10px; }
+        
+        /* Butang Edit Kuantiti (+ / -) */
+        .qty-ctrl { display: flex; align-items: center; gap: 10px; background: #f5f5f5; padding: 5px 10px; border-radius: 20px; }
+        .qty-btn { background: white; border: 1px solid #ddd; width: 28px; height: 28px; border-radius: 50%; font-weight: bold; color: var(--primary); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        
+        .btn-whatsapp { background-color: #25D366; color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; margin-top: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        
+        /* FLOATING BAR BAWAH (Total Price) */
+        .float-bar { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: #333; color: white; padding: 12px 20px; border-radius: 50px; display: none; justify-content: space-between; align-items: center; z-index: 95; box-shadow: 0 5px 15px rgba(0,0,0,0.3); cursor: pointer; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="search-bar">🔍 Cari Buah Segar...</div>
-        <div class="cart-icon">🛒</div>
+        <div class="logo">Borneo Fresh 🍍</div>
+        <div class="cart-icon" onclick="openModal()">
+            🛒 <span class="cart-badge" id="badge-count">0</span>
+        </div>
     </header>
 
-    <div class="trust-bar">
-        <div class="trust-item"><span>✔</span> 100% Segar</div>
-        <div class="trust-item"><span>🚚</span> Hantar Cepat</div>
-        <div class="trust-item"><span>🛡</span> Trusted</div>
-    </div>
-
     <div class="container">
-        <div class="section-title">SENARAI BUAH TERKINI</div>
+        <div style="margin-bottom:10px; font-weight:bold; color:#777; font-size:0.9rem;">SENARAI BUAH</div>
         <div id="list" class="product-list">
-            <p style="text-align:center; width:200%; padding:20px; color:#999;">Memuatkan stok...</p>
+            <p style="text-align:center; width:200%; padding:20px; color:#999;">Sedang memuatkan...</p>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item">
+        <a href="#" class="nav-item" onclick="closeModal()">
             <span class="nav-icon">🏠</span>Utama
-        </div>
-        <div class="nav-item">
-            <span class="nav-icon">🔔</span>Notifikasi
-        </div>
-        <a href="admin.html" class="nav-item admin-btn">
+        </a>
+        <a href="admin.html" class="nav-item" style="color:#ee4d2d;">
             <span class="nav-icon">👤</span>Saya (Admin)
         </a>
     </div>
 
-    <div id="cart-bar" class="cart-bar">
-        <div style="padding-left:10px;">
-            <b id="count">0</b> Item | RM <b id="total">0.00</b>
+    <div id="float-bar" class="float-bar" onclick="openModal()">
+        <div style="font-size:0.9rem;">
+            <span id="float-count">0</span> Item | RM <span id="float-total">0.00</span>
         </div>
-        <a href="#" onclick="checkout()" class="btn-checkout">WhatsApp ➜</a>
+        <div style="font-weight:bold; color:#FFC107;">Lihat Bakul ➜</div>
+    </div>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <div class="cart-header">
+                <h2 style="margin:0; font-size:1.2rem;">Bakul Pesanan</h2>
+                <button onclick="closeModal()" style="background:none; border:none; font-size:1.5rem;">✕</button>
+            </div>
+            
+            <div id="cart-items-container">
+                </div>
+
+            <div style="margin-top:20px; display:flex; justify-content:space-between; font-weight:bold; font-size:1.1rem; border-top:2px dashed #eee; padding-top:15px;">
+                <span>Total Perlu Bayar:</span>
+                <span style="color:var(--primary);">RM <span id="modal-total">0.00</span></span>
+            </div>
+
+            <button class="btn-whatsapp" onclick="checkoutWhatsapp()">
+                <span>Hantar ke WhatsApp</span> 🚀
+            </button>
+        </div>
     </div>
 
     <script>
-        // --- SCRIPT ---
-        const PHONE_NO = "60126119542"; 
-        let cart = [];
+        const PHONE_NO = "60126119542"; // NOMBOR TUAN
+        let cart = JSON.parse(localStorage.getItem('myCart')) || []; // Simpan data dalam phone
 
-        // 1. Load Stok (Anti-Cache)
+        // Load Stok (Anti Cache)
         var script = document.createElement('script');
         script.src = 'stok.js?v=' + new Date().getTime();
         document.body.appendChild(script);
+        script.onload = function() { render(); updateUI(); };
 
-        script.onload = function() { render(); };
-
+        // 1. Papar Produk
         function render() {
             const listDiv = document.getElementById('list');
             if(typeof products === 'undefined' || products.length === 0) {
-                listDiv.innerHTML = "<p style='padding:20px; text-align:center'>Tiada stok.</p>";
-                return;
+                listDiv.innerHTML = "<p style='text-align:center; width:200%; color:#999;'>Tiada stok.</p>"; return;
             }
-            
             listDiv.innerHTML = products.map(p => {
-                // Guna gambar kosong jika tiada link
-                const imgUrl = (p.img && p.img.length > 10) ? p.img : ''; 
-                
+                const imgUrl = (p.img && p.img.length > 10) ? p.img : '';
                 return `
                 <div class="card">
                     <div class="img-box">
-                        ${imgUrl ? `<img src="${imgUrl}" onerror="this.style.display='none'">` : '<span style="color:#999;font-size:0.8rem">Tiada Gambar</span>'}
+                        ${imgUrl ? `<img src="${p.img}" class="real-img" style="display:block" onerror="this.style.display='none'">` : 'Tiada<br>Gambar'}
                     </div>
                     <div class="card-body">
-                        <div class="p-name">${p.name}</div>
                         <div>
-                            <div class="p-price">RM ${p.price}</div>
-                            <div class="p-unit">per ${p.unit}</div>
+                            <div class="p-name">${p.name}</div>
+                            <div class="p-desc">${p.desc || 'Segar'}</div>
                         </div>
-                        <button class="btn-add" onclick="addToCart('${p.name}', ${p.price})">+ KERANJANG</button>
+                        <div class="price-row">
+                            <div class="p-price">RM ${p.price}</div>
+                            <button class="btn-add" onclick="addToCart('${p.name}', ${p.price})">+ BAKUL</button>
+                        </div>
                     </div>
                 </div>
             `}).join('');
         }
 
+        // 2. Tambah ke Bakul
         function addToCart(name, price) {
-            cart.push({name, price});
-            updateCart();
+            const item = cart.find(i => i.name === name);
+            if(item) {
+                item.qty++;
+            } else {
+                cart.push({name, price, qty: 1});
+            }
+            saveCart();
+            updateUI();
+            // Auto buka bakul kalau nak (Optional, saya matikan dulu supaya boleh shopping lagi)
+             if(navigator.vibrate) navigator.vibrate(50);
         }
 
-        function updateCart() {
-            const count = cart.length;
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            
-            document.getElementById('count').innerText = count;
-            document.getElementById('total').innerText = total.toFixed(2);
-            
-            const bar = document.getElementById('cart-bar');
-            if(count > 0) bar.style.display = "flex";
+        // 3. Edit Kuantiti (+ / -)
+        function updateQty(name, change) {
+            const item = cart.find(i => i.name === name);
+            if(item) {
+                item.qty += change;
+                if(item.qty <= 0) {
+                    cart = cart.filter(i => i.name !== name); // Buang item
+                }
+                saveCart();
+                updateUI();
+                renderModal(); // Refresh list dalam modal
+            }
         }
 
-        function checkout() {
+        // 4. Update UI (Badge & Total)
+        function updateUI() {
+            const count = cart.reduce((sum, i) => sum + i.qty, 0);
+            const total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+
+            document.getElementById('badge-count').innerText = count;
+            document.getElementById('float-count').innerText = count;
+            document.getElementById('float-total').innerText = total.toFixed(2);
+            document.getElementById('modal-total').innerText = total.toFixed(2);
+
+            const floatBar = document.getElementById('float-bar');
+            if(count > 0) floatBar.style.display = "flex";
+            else {
+                floatBar.style.display = "none";
+                closeModal();
+            }
+        }
+
+        // 5. Modal Functions
+        function openModal() {
+            renderModal();
+            document.getElementById('cart-modal').style.display = "flex";
+        }
+        function closeModal() {
+            document.getElementById('cart-modal').style.display = "none";
+        }
+        window.onclick = function(e) {
+            if(e.target == document.getElementById('cart-modal')) closeModal();
+        }
+
+        function renderModal() {
+            const container = document.getElementById('cart-items-container');
+            if(cart.length === 0) {
+                container.innerHTML = "<p style='text-align:center'>Bakul kosong.</p>";
+                return;
+            }
+            container.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div>
+                        <div style="font-weight:bold;">${item.name}</div>
+                        <div style="font-size:0.8rem; color:#777;">RM ${item.price} / unit</div>
+                    </div>
+                    <div class="qty-ctrl">
+                        <button class="qty-btn" onclick="updateQty('${item.name}', -1)">-</button>
+                        <span>${item.qty}</span>
+                        <button class="qty-btn" onclick="updateQty('${item.name}', 1)">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 6. Checkout WhatsApp
+        function checkoutWhatsapp() {
             if(cart.length === 0) return;
             
-            // Gabung item sama
-            let summary = {};
-            cart.forEach(i => { summary[i.name] = (summary[i.name] || 0) + 1; });
+            let msg = "*PESANAN BORNEO FRESH*\n--------------------------\n";
+            let total = 0;
 
-            let msg = "Salam Borneo Fresh, saya nak order:\n\n";
-            let grandTotal = 0;
+            cart.forEach(item => {
+                let sub = item.price * item.qty;
+                total += sub;
+                msg += `${item.name} (x${item.qty}) - RM${sub}\n`;
+            });
 
-            for(let [name, qty] of Object.entries(summary)) {
-                let price = cart.find(i => i.name === name).price;
-                let sub = price * qty;
-                grandTotal += sub;
-                msg += `- ${name} (x${qty}) = RM${sub}\n`;
-            }
-            
-            msg += `\n*TOTAL: RM ${grandTotal.toFixed(2)}*`;
-            msg += `\n\nLokasi Hantar:`;
-            
+            msg += `--------------------------\n*TOTAL: RM ${total.toFixed(2)}*\n\n`;
+            msg += `Mohon sahkan stok & kos penghantaran.`;
+
             window.open(`https://wa.me/${PHONE_NO}?text=${encodeURIComponent(msg)}`, '_blank');
         }
+
+        function saveCart() { localStorage.setItem('myCart', JSON.stringify(cart)); }
     </script>
+
 </body>
 </html>
