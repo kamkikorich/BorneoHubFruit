@@ -3,84 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Upload Gambar</title>
+    <title>Admin Panel V3</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; max-width: 800px; margin: 0 auto; color: #333; }
-        
-        /* Login Screen */
-        .login-box { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; margin-top: 50px; }
+        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; margin-top: 50px; }
         .app-box { display: none; }
-
-        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-login { background: #2c3e50; color: white; }
-        .btn-save { background: #27ae60; color: white; margin-top: 10px; }
-        .btn-del { background: #c0392b; color: white; width: auto; padding: 6px 12px; font-size: 0.8rem; float: right; }
-
-        .product-item { background: white; padding: 20px; margin-bottom: 15px; border-radius: 10px; border-left: 6px solid #27ae60; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; gap: 15px; align-items: center; }
-        .thumb-img { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd; }
-        
-        /* Upload Box Style */
-        .upload-area { border: 2px dashed #ccc; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 15px; cursor: pointer; background: #fafafa; }
-        .upload-area:hover { border-color: #27ae60; background: #f0fff4; }
-        #preview-box { display: none; margin-top: 10px; }
-        #preview-img { max-width: 100%; height: 200px; object-fit: contain; border: 1px solid #ddd; border-radius: 5px; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; background: #2c3e50; color: white; }
+        .btn-save { background: #27ae60; margin-top: 10px; }
+        .product-item { background: white; padding: 10px; margin-bottom: 10px; border-radius: 8px; display: flex; gap: 10px; align-items: center; }
+        .thumb-img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+        .upload-area { border: 2px dashed #ccc; padding: 15px; text-align: center; margin-bottom: 10px; cursor: pointer; background: #fff; }
+        #preview-box img { max-height: 150px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <div id="login-screen" class="login-box">
         <h2>🔐 Login Admin</h2>
-        <p>Masukkan GitHub Token</p>
-        <input type="password" id="github-token" placeholder="Paste Token di sini">
-        <button class="btn-login" onclick="login()">MASUK</button>
+        <input type="password" id="github-token" placeholder="Paste Token GitHub (ghp_...)">
+        <button onclick="login()">MASUK</button>
     </div>
 
     <div id="app-screen" class="app-box">
         <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-            <h2>📦 Urus Stok & Gambar</h2>
-            <button onclick="logout()" style="width:auto; background:#95a5a6; color:white;">Keluar</button>
+            <h2>📦 Urus Stok</h2>
+            <button onclick="logout()" style="width:auto; background:#777; padding:5px 15px;">Keluar</button>
         </div>
         
-        <div style="background:white; padding:20px; border-radius:12px; margin-bottom:30px;">
+        <div style="background:white; padding:20px; border-radius:12px; margin-bottom:20px;">
             <h3>Tambah Produk</h3>
             <input type="text" id="p-name" placeholder="Nama Produk">
-            <input type="text" id="p-desc" placeholder="Info Produk">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                <input type="number" id="p-price" placeholder="Harga (RM)">
+            <input type="text" id="p-desc" placeholder="Info (Cth: Manis)">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <input type="number" id="p-price" placeholder="Harga">
                 <input type="text" id="p-unit" placeholder="Unit (kg/biji)">
             </div>
 
-            <label style="font-weight:bold; display:block; margin-bottom:5px;">Upload Gambar:</label>
             <div class="upload-area" onclick="document.getElementById('file-input').click()">
-                <p style="margin:0; color:#666;">📁 Klik sini untuk pilih gambar (JPG/PNG)</p>
+                📁 Klik untuk pilih gambar (Auto-Resize)
                 <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleFile(this)">
             </div>
-            
-            <div id="preview-box">
-                <img id="preview-img" src="">
-                <p style="font-size:0.8rem; color:green;">Gambar sedia untuk diupload!</p>
-            </div>
+            <div id="preview-box" style="display:none"><img id="preview-img" src=""></div>
 
-            <input type="text" id="p-img-url" placeholder="Atau paste link gambar di sini (Optional)" style="font-size:0.8rem;">
-
-            <button class="btn-save" onclick="addProduct()">+ TAMBAH & SIMPAN</button>
+            <button class="btn-save" onclick="addProduct()">+ TAMBAH</button>
         </div>
 
-        <div id="loading-msg" style="display:none; text-align:center; color:#e67e22; font-weight:bold;">Sedang proses... (Jangan tutup)</div>
+        <div id="loading-msg" style="display:none; text-align:center; color:orange; font-weight:bold;">Sedang proses...</div>
         <div id="product-list"></div>
     </div>
 
 <script>
-    // --- SETTING ---
     const GITHUB_USERNAME = "kamkikorich"; 
     const REPO_NAME = "borneoHubFruit";    
     const FILE_PATH = "stok.js";
-    // --------------
 
     let products = [];
     let fileSha = ""; 
-    let currentBase64 = ""; // Simpan data gambar sementara
+    let currentBase64 = ""; 
 
     if(sessionStorage.getItem('gh_token')) {
         document.getElementById('github-token').value = sessionStorage.getItem('gh_token');
@@ -89,7 +69,7 @@
 
     function login() {
         const token = document.getElementById('github-token').value.trim();
-        if(!token) return alert("Sila masukkan token!");
+        if(!token) return alert("Masukkan Token!");
         sessionStorage.setItem('gh_token', token);
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('app-screen').style.display = 'block';
@@ -98,30 +78,22 @@
 
     function logout() { sessionStorage.removeItem('gh_token'); location.reload(); }
 
-    // FUNGSI PROSES GAMBAR (KECILKAN & TUKAR JADI BASE64)
     function handleFile(input) {
         const file = input.files[0];
         if (!file) return;
-
         const reader = new FileReader();
         reader.onload = function(e) {
             const img = new Image();
             img.src = e.target.result;
             img.onload = function() {
-                // Resize gambar (Max width 500px) supaya tak berat
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
-                const MAX_WIDTH = 500;
+                const MAX_WIDTH = 400; 
                 const scaleSize = MAX_WIDTH / img.width;
                 canvas.width = MAX_WIDTH;
                 canvas.height = img.height * scaleSize;
-
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                
-                // Tukar jadi kod teks (JPEG quality 0.7)
-                currentBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                
-                // Tunjuk preview
+                currentBase64 = canvas.toDataURL('image/jpeg', 0.6);
                 document.getElementById('preview-img').src = currentBase64;
                 document.getElementById('preview-box').style.display = 'block';
             }
@@ -140,24 +112,31 @@
             
             const data = await response.json();
             fileSha = data.sha; 
-            const content = atob(data.content).replace("const products =", "").replace(";", "").trim();
-            products = JSON.parse(content);
+            
+            // SMART CLEANER (Cari [ dan ] sahaja)
+            const rawContent = atob(data.content);
+            const firstBracket = rawContent.indexOf('[');
+            const lastBracket = rawContent.lastIndexOf(']');
+            
+            if (firstBracket !== -1 && lastBracket !== -1) {
+                products = JSON.parse(rawContent.substring(firstBracket, lastBracket + 1));
+            } else {
+                products = [];
+            }
             renderList();
-        } catch (err) { alert("Ralat loading: " + err.message); } 
+        } catch (err) { alert("Error: " + err.message); } 
         finally { document.getElementById('loading-msg').style.display = 'none'; }
     }
 
     async function saveToGitHub() {
         document.getElementById('loading-msg').style.display = 'block';
-        document.getElementById('loading-msg').innerText = "Sedang upload ke GitHub... Tunggu 10 saat...";
-        
         const token = sessionStorage.getItem('gh_token');
         const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
         
         const newContent = `const products = ${JSON.stringify(products, null, 4)};`;
-        const encodedContent = btoa(unescape(encodeURIComponent(newContent))); // Encoding fix for UTF8
+        const encodedContent = btoa(unescape(encodeURIComponent(newContent)));
 
-        const bodyData = { message: "Update Stok + Gambar", content: encodedContent };
+        const bodyData = { message: "Update", content: encodedContent };
         if(fileSha) bodyData.sha = fileSha; 
 
         try {
@@ -166,11 +145,11 @@
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify(bodyData)
             });
-            if(!response.ok) throw new Error("Gagal simpan!");
+            if(!response.ok) throw new Error("Gagal simpan.");
             const data = await response.json();
             fileSha = data.content.sha;
-            alert("Berjaya! Gambar dan stok diupdate.");
-            location.reload(); // Refresh untuk bersihkan memori
+            alert("Berjaya!");
+            location.reload();
         } catch (err) { alert(err.message); } 
         finally { document.getElementById('loading-msg').style.display = 'none'; }
     }
@@ -179,11 +158,8 @@
         document.getElementById('product-list').innerHTML = products.map((p, i) => `
             <div class="product-item">
                 <img src="${p.img}" class="thumb-img" onerror="this.src='https://via.placeholder.com/50'">
-                <div style="flex-grow:1;">
-                    <strong>${p.name}</strong><br>
-                    RM${p.price}/${p.unit}
-                </div>
-                <button class="btn-del" onclick="delProduct(${i})">HAPUS</button>
+                <div style="flex-grow:1;"><strong>${p.name}</strong><br>RM${p.price}</div>
+                <button onclick="delProduct(${i})" style="background:#c0392b; width:auto; padding:5px 10px;">Hapus</button>
             </div>
         `).join('');
     }
@@ -191,17 +167,7 @@
     function addProduct() {
         const name = document.getElementById('p-name').value;
         const price = document.getElementById('p-price').value;
-        const manualUrl = document.getElementById('p-img-url').value;
-
-        if(!name || !price) return alert("Isi nama & harga!");
-
-        // Pilih gambar upload ATAU link manual
-        let finalImg = "https://via.placeholder.com/150";
-        if (currentBase64) {
-            finalImg = currentBase64;
-        } else if (manualUrl) {
-            finalImg = manualUrl;
-        }
+        if(!name || !price) return alert("Isi nama dan harga.");
 
         products.push({
             id: Date.now(),
@@ -209,14 +175,13 @@
             desc: document.getElementById('p-desc').value,
             price: parseFloat(price),
             unit: document.getElementById('p-unit').value,
-            img: finalImg
+            img: currentBase64 || "https://via.placeholder.com/150"
         });
-        
         saveToGitHub();
     }
 
-    function delProduct(index) {
-        if(confirm("Padam?")) { products.splice(index, 1); saveToGitHub(); }
+    function delProduct(i) {
+        if(confirm("Padam?")) { products.splice(i, 1); saveToGitHub(); }
     }
 </script>
 </body>
