@@ -1,13 +1,5 @@
 const products = [
     {
-        "id": 1710002,
-        "name": "Avocado Tenom",
-        "desc": "Lemak berkrim",
-        "price": 20,
-        "unit": "kg",
-        "img": ""
-    },
-    {
         "id": 1763203817976,
         "name": "Buah Tarap",
         "desc": "Manis",
