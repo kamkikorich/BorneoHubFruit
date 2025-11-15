@@ -30,6 +30,12 @@
         .btn-wa:hover { background: #1ebd5b; }
 
         .loading { text-align: center; padding: 20px; color: #777; }
+
+        /* Footer Admin Link */
+        footer { text-align: center; padding: 30px; color: #999; font-size: 0.8rem; }
+        footer a { color: #999; text-decoration: none; border: 1px solid #ddd; padding: 5px 10px; border-radius: 20px; transition: 0.3s; }
+        footer a:hover { background: #ddd; color: #333; }
+
     </style>
 </head>
 <body>
@@ -45,19 +51,23 @@
     </div>
 </div>
 
+<footer>
+    <p>&copy; 2025 Borneo Fresh Fruits</p>
+    <br>
+    <a href="admin.html">🔒 Admin Login</a>
+</footer>
+
 <script src="stok.js"></script>
 
 <script>
-    // NOMBOR TELEFON TUAN (Tukar di sini jika perlu)
+    // NOMBOR TELEFON TUAN
     const PHONE_NO = "60126119542"; 
 
     const listDiv = document.getElementById('list');
 
-    // Fungsi untuk paparkan produk
     function render() {
-        // Cek jika fail stok.js berjaya dibaca
         if(typeof products === 'undefined' || products.length === 0) {
-            listDiv.innerHTML = "<p style='text-align:center; width:100%;'>Stok sedang dikemaskini. Sila datang sebentar lagi.</p>";
+            listDiv.innerHTML = "<p style='text-align:center; width:100%;'>Stok sedang dikemaskini.</p>";
             return;
         }
 
@@ -76,7 +86,6 @@
         `).join('');
     }
 
-    // Jalankan
     render();
 </script>
 
