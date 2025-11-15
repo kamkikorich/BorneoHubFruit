@@ -2,58 +2,170 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kedai Buah BorneoHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Borneo Fresh Fruits</title>
     <style>
-        body { font-family: Arial, sans-serif; background:#f5f6fa; margin:0; }
-        header {
-            background:#2ecc71; padding:15px; color:white;
-            display:flex; justify-content:space-between; align-items:center;
-        }
-        header h2 { margin:0; font-size:1.3rem; }
-        header a { color:white; font-weight:bold; text-decoration:none; font-size:0.9rem; }
+        /* --- TEMA PREMIUM SHOPEE --- */
+        :root { --primary: #ee4d2d; --bg: #f5f5f5; --card: #fff; --text: #333; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 100px; }
 
-        .container { padding:15px; }
+        /* Header */
+        header { background: var(--primary); color: white; padding: 15px; position: sticky; top: 0; z-index: 99; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .search-bar { background: white; border-radius: 3px; padding: 8px 10px; flex-grow: 1; color: #ee4d2d; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; }
+        .cart-icon { font-size: 1.5rem; margin-left: 10px; position: relative; }
+        
+        /* Trust Badge */
+        .trust-bar { background: white; padding: 10px; display: flex; justify-content: space-around; font-size: 0.7rem; color: #555; border-bottom: 1px solid #eee; }
+        .trust-item span { color: var(--primary); font-weight: bold; }
 
-        .product-card {
-            background:white; border-radius:10px; padding:10px; margin-bottom:15px;
-            display:flex; gap:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);
-        }
-        img { width:100px; border-radius:8px; }
+        /* Grid Produk */
+        .container { max-width: 600px; margin: 0 auto; padding: 10px; }
+        .section-title { color: var(--primary); font-weight: bold; margin: 10px 0; font-size: 1rem; border-left: 3px solid var(--primary); padding-left: 8px; }
+        .product-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        /* Mobile */
-        @media(max-width:600px){
-            .product-card { flex-direction:column; text-align:center; }
-            img { width:70%; margin:auto; }
-        }
+        /* Kad Produk */
+        .card { background: var(--card); border-radius: 5px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 100%; }
+        .img-box { width: 100%; height: 150px; background: #e0e0e0; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .card-body { padding: 8px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .p-name { font-size: 0.9rem; margin-bottom: 5px; line-height: 1.2em; height: 2.4em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .p-price { color: var(--primary); font-weight: bold; font-size: 1rem; }
+        .p-unit { font-size: 0.7rem; color: #777; }
+        
+        .btn-add { background: var(--primary); color: white; border: none; width: 100%; padding: 8px; border-radius: 3px; font-weight: bold; margin-top: 8px; cursor: pointer; }
+        .btn-add:active { opacity: 0.8; }
+
+        /* Footer Menu */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #eee; display: flex; justify-content: space-around; padding: 8px 0; z-index: 100; max-width: 600px; margin: 0 auto; left: 0; right: 0; }
+        .nav-item { text-align: center; font-size: 0.7rem; color: #777; flex: 1; text-decoration: none; }
+        .nav-icon { font-size: 1.4rem; display: block; margin-bottom: 2px; }
+        .admin-btn { color: #ee4d2d !important; }
+
+        /* Cart Floating Bar */
+        .cart-bar { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: #333; color: white; padding: 15px; border-radius: 50px; display: none; justify-content: space-between; align-items: center; z-index: 90; box-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: slideUp 0.3s; }
+        @keyframes slideUp { from { bottom: -50px; } to { bottom: 70px; } }
+        .btn-checkout { background: #25D366; color: white; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; }
+
     </style>
 </head>
 <body>
 
-<header>
-    <h2>Kedai Buah</h2>
-    <a href="admin.html">Admin Login</a>
-</header>
+    <header>
+        <div class="search-bar">🔍 Cari Buah Segar...</div>
+        <div class="cart-icon">🛒</div>
+    </header>
 
-<div class="container" id="product-list"></div>
+    <div class="trust-bar">
+        <div class="trust-item"><span>✔</span> 100% Segar</div>
+        <div class="trust-item"><span>🚚</span> Hantar Cepat</div>
+        <div class="trust-item"><span>🛡</span> Trusted</div>
+    </div>
 
-<script src="stok.js"></script>
-<script>
-    function renderStore() {
-        const list = document.getElementById("product-list");
-        list.innerHTML = products.map(p => `
-            <div class="product-card">
-                <img src="${p.img}">
-                <div>
-                    <h3>${p.name}</h3>
-                    <p>${p.desc}</p>
-                    <strong>RM ${p.price}/${p.unit}</strong>
+    <div class="container">
+        <div class="section-title">SENARAI BUAH TERKINI</div>
+        <div id="list" class="product-list">
+            <p style="text-align:center; width:200%; padding:20px; color:#999;">Memuatkan stok...</p>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item">
+            <span class="nav-icon">🏠</span>Utama
+        </div>
+        <div class="nav-item">
+            <span class="nav-icon">🔔</span>Notifikasi
+        </div>
+        <a href="admin.html" class="nav-item admin-btn">
+            <span class="nav-icon">👤</span>Saya (Admin)
+        </a>
+    </div>
+
+    <div id="cart-bar" class="cart-bar">
+        <div style="padding-left:10px;">
+            <b id="count">0</b> Item | RM <b id="total">0.00</b>
+        </div>
+        <a href="#" onclick="checkout()" class="btn-checkout">WhatsApp ➜</a>
+    </div>
+
+    <script>
+        // --- SCRIPT ---
+        const PHONE_NO = "60126119542"; 
+        let cart = [];
+
+        // 1. Load Stok (Anti-Cache)
+        var script = document.createElement('script');
+        script.src = 'stok.js?v=' + new Date().getTime();
+        document.body.appendChild(script);
+
+        script.onload = function() { render(); };
+
+        function render() {
+            const listDiv = document.getElementById('list');
+            if(typeof products === 'undefined' || products.length === 0) {
+                listDiv.innerHTML = "<p style='padding:20px; text-align:center'>Tiada stok.</p>";
+                return;
+            }
+            
+            listDiv.innerHTML = products.map(p => {
+                // Guna gambar kosong jika tiada link
+                const imgUrl = (p.img && p.img.length > 10) ? p.img : ''; 
+                
+                return `
+                <div class="card">
+                    <div class="img-box">
+                        ${imgUrl ? `<img src="${imgUrl}" onerror="this.style.display='none'">` : '<span style="color:#999;font-size:0.8rem">Tiada Gambar</span>'}
+                    </div>
+                    <div class="card-body">
+                        <div class="p-name">${p.name}</div>
+                        <div>
+                            <div class="p-price">RM ${p.price}</div>
+                            <div class="p-unit">per ${p.unit}</div>
+                        </div>
+                        <button class="btn-add" onclick="addToCart('${p.name}', ${p.price})">+ KERANJANG</button>
+                    </div>
                 </div>
-            </div>
-        `).join('');
-    }
-    renderStore();
-</script>
+            `}).join('');
+        }
 
+        function addToCart(name, price) {
+            cart.push({name, price});
+            updateCart();
+        }
+
+        function updateCart() {
+            const count = cart.length;
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            
+            document.getElementById('count').innerText = count;
+            document.getElementById('total').innerText = total.toFixed(2);
+            
+            const bar = document.getElementById('cart-bar');
+            if(count > 0) bar.style.display = "flex";
+        }
+
+        function checkout() {
+            if(cart.length === 0) return;
+            
+            // Gabung item sama
+            let summary = {};
+            cart.forEach(i => { summary[i.name] = (summary[i.name] || 0) + 1; });
+
+            let msg = "Salam Borneo Fresh, saya nak order:\n\n";
+            let grandTotal = 0;
+
+            for(let [name, qty] of Object.entries(summary)) {
+                let price = cart.find(i => i.name === name).price;
+                let sub = price * qty;
+                grandTotal += sub;
+                msg += `- ${name} (x${qty}) = RM${sub}\n`;
+            }
+            
+            msg += `\n*TOTAL: RM ${grandTotal.toFixed(2)}*`;
+            msg += `\n\nLokasi Hantar:`;
+            
+            window.open(`https://wa.me/${PHONE_NO}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+    </script>
 </body>
 </html>
