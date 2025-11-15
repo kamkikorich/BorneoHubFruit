@@ -3,205 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel V3 (Anti-Error)</title>
+    <title>Borneo Fresh Fruits</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; max-width: 800px; margin: 0 auto; color: #333; }
-        .login-box { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; margin-top: 50px; }
-        .app-box { display: none; }
-        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-login { background: #2c3e50; color: white; }
-        .btn-save { background: #27ae60; color: white; margin-top: 10px; }
-        .btn-del { background: #c0392b; color: white; width: auto; padding: 6px 12px; font-size: 0.8rem; float: right; }
-        .product-item { background: white; padding: 15px; margin-bottom: 15px; border-radius: 10px; border-left: 6px solid #27ae60; display: flex; gap: 15px; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .thumb-img { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; background: #eee; }
-        .upload-area { border: 2px dashed #ccc; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 15px; cursor: pointer; background: #fafafa; }
-        #preview-box { display: none; margin-top: 10px; }
-        #preview-img { max-width: 100%; height: 200px; object-fit: contain; }
+        body { font-family: sans-serif; margin: 0; background-color: #f4f4f9; color: #333; padding-bottom: 50px; }
+        
+        /* Header */
+        header { background-color: #27ae60; color: white; padding: 20px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1 { margin: 0; font-size: 1.5rem; }
+        p { margin: 5px 0 0; opacity: 0.9; font-size: 0.9rem; }
+
+        /* Container */
+        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+        
+        /* Kad Produk */
+        .product-card { 
+            background: white; 
+            border-radius: 10px; 
+            overflow: hidden; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
+            margin-bottom: 15px; 
+            display: flex; 
+            align-items: center;
+            padding: 15px;
+        }
+
+        /* Gambar */
+        .thumb { 
+            width: 80px; 
+            height: 80px; 
+            background-color: #eee; 
+            border-radius: 8px; 
+            object-fit: cover; 
+            flex-shrink: 0;
+            margin-right: 15px;
+        }
+
+        /* Info */
+        .info { flex-grow: 1; }
+        .name { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
+        .desc { color: #666; font-size: 0.85rem; margin-bottom: 5px; }
+        .price { color: #27ae60; font-weight: bold; font-size: 1rem; }
+
+        /* Butang Beli */
+        .btn-buy { 
+            background-color: #25D366; 
+            color: white; 
+            text-decoration: none; 
+            padding: 10px 15px; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        /* Footer */
+        footer { text-align: center; margin-top: 40px; color: #999; font-size: 0.8rem; }
+        .admin-link { color: #ccc; text-decoration: none; border: 1px solid #ddd; padding: 5px 10px; border-radius: 20px; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen" class="login-box">
-        <h2>🔐 Login Admin</h2>
-        <p>Masukkan GitHub Token</p>
-        <input type="password" id="github-token" placeholder="Paste Token di sini">
-        <button class="btn-login" onclick="login()">MASUK</button>
+    <header>
+        <h1>Borneo Fresh Fruits 🍍</h1>
+        <p>Hubungi Walter: 012-611 9542</p>
+    </header>
+
+    <div class="container">
+        <div id="product-list">
+            <p style="text-align:center; padding:20px; color:#777;">Sedang memuatkan senarai...</p>
+        </div>
     </div>
 
-    <div id="app-screen" class="app-box">
-        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-            <h2>📦 Urus Stok</h2>
-            <button onclick="logout()" style="background:#95a5a6; color:white; width:auto; padding:8px 15px;">Keluar</button>
-        </div>
-        
-        <div style="background:white; padding:20px; border-radius:12px; margin-bottom:30px;">
-            <h3>Tambah Produk</h3>
-            <input type="text" id="p-name" placeholder="Nama Produk">
-            <input type="text" id="p-desc" placeholder="Info Produk">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                <input type="number" id="p-price" placeholder="Harga (RM)">
-                <input type="text" id="p-unit" placeholder="Unit (kg/biji)">
-            </div>
+    <footer>
+        <p>&copy; 2025 Borneo Fresh Fruits</p>
+        <br><br>
+        <a href="admin.html" class="admin-link">🔒 Masuk Admin</a>
+    </footer>
 
-            <label style="font-weight:bold; display:block; margin-bottom:5px;">Gambar:</label>
-            <div class="upload-area" onclick="document.getElementById('file-input').click()">
-                <p style="margin:0; color:#666;">📁 Klik untuk pilih gambar (Auto-Resize)</p>
-                <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleFile(this)">
-            </div>
-            <div id="preview-box"><img id="preview-img" src=""></div>
+    <script src="stok.js"></script>
+    <script>
+        const PHONE = "60126119542";
+        const listDiv = document.getElementById('product-list');
 
-            <button class="btn-save" onclick="addProduct()">+ TAMBAH & SIMPAN</button>
-        </div>
-
-        <div id="loading-msg" style="display:none; text-align:center; color:#e67e22; font-weight:bold;">Sedang proses...</div>
-        <div id="product-list"></div>
-    </div>
-
-<script>
-    // --- SETTING ---
-    const GITHUB_USERNAME = "kamkikorich"; 
-    const REPO_NAME = "borneoHubFruit";    
-    const FILE_PATH = "stok.js";
-    // --------------
-
-    let products = [];
-    let fileSha = ""; 
-    let currentBase64 = ""; 
-
-    if(sessionStorage.getItem('gh_token')) {
-        document.getElementById('github-token').value = sessionStorage.getItem('gh_token');
-        login();
-    }
-
-    function login() {
-        const token = document.getElementById('github-token').value.trim();
-        if(!token) return alert("Sila masukkan token!");
-        sessionStorage.setItem('gh_token', token);
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('app-screen').style.display = 'block';
-        loadFromGitHub();
-    }
-
-    function logout() { sessionStorage.removeItem('gh_token'); location.reload(); }
-
-    function handleFile(input) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const MAX_WIDTH = 400; // Kecilkan lagi supaya selamat
-                const scaleSize = MAX_WIDTH / img.width;
-                canvas.width = MAX_WIDTH;
-                canvas.height = img.height * scaleSize;
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                currentBase64 = canvas.toDataURL('image/jpeg', 0.6); // Quality rendah sikit
-                document.getElementById('preview-img').src = currentBase64;
-                document.getElementById('preview-box').style.display = 'block';
+        function render() {
+            if (typeof products === 'undefined' || products.length === 0) {
+                listDiv.innerHTML = "<p style='text-align:center; color:#888;'>Tiada stok.</p>";
+                return;
             }
-        }
-        reader.readAsDataURL(file);
-    }
-
-    // --- FUNGSI BACA DATA YANG LEBIH BIJAK (SMART PARSER) ---
-    async function loadFromGitHub() {
-        document.getElementById('loading-msg').style.display = 'block';
-        const token = sessionStorage.getItem('gh_token');
-        const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
-
-        try {
-            const response = await fetch(url, { headers: { 'Authorization': `token ${token}` } });
-            if(response.status === 404) { products = []; renderList(); return; }
-            
-            const data = await response.json();
-            fileSha = data.sha; 
-            
-            // TEKNIK BARU: Cari kurungan [ dan ] sahaja
-            const rawContent = atob(data.content);
-            const firstBracket = rawContent.indexOf('[');
-            const lastBracket = rawContent.lastIndexOf(']');
-            
-            if (firstBracket !== -1 && lastBracket !== -1) {
-                const jsonPart = rawContent.substring(firstBracket, lastBracket + 1);
-                products = JSON.parse(jsonPart);
-            } else {
-                products = []; // Kalau tak jumpa array, anggap kosong
-            }
-            
-            renderList();
-        } catch (err) { alert("Ralat membaca stok: " + err.message); } 
-        finally { document.getElementById('loading-msg').style.display = 'none'; }
-    }
-
-    async function saveToGitHub() {
-        document.getElementById('loading-msg').style.display = 'block';
-        document.getElementById('loading-msg').innerText = "Sedang upload... Jangan tutup!";
-        
-        const token = sessionStorage.getItem('gh_token');
-        const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
-        
-        // Simpan dengan format yang kemas
-        const newContent = `const products = ${JSON.stringify(products, null, 4)};`;
-        
-        // Encoding yang lebih selamat untuk Base64
-        const encodedContent = btoa(unescape(encodeURIComponent(newContent)));
-
-        const bodyData = { message: "Update via Admin V3", content: encodedContent };
-        if(fileSha) bodyData.sha = fileSha; 
-
-        try {
-            const response = await fetch(url, {
-                method: 'PUT',
-                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify(bodyData)
-            });
-            if(!response.ok) throw new Error("Gagal simpan! Mungkin fail terlalu besar.");
-            const data = await response.json();
-            fileSha = data.content.sha;
-            alert("Berjaya!");
-            location.reload();
-        } catch (err) { alert(err.message); } 
-        finally { document.getElementById('loading-msg').style.display = 'none'; }
-    }
-
-    function renderList() {
-        document.getElementById('product-list').innerHTML = products.map((p, i) => `
-            <div class="product-item">
-                <img src="${p.img}" class="thumb-img" onerror="this.src='https://via.placeholder.com/50'">
-                <div style="flex-grow:1;">
-                    <strong>${p.name}</strong><br>RM${p.price}
+            listDiv.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <img src="${p.img}" class="thumb" onerror="this.style.display='none'">
+                    <div class="info">
+                        <div class="name">${p.name}</div>
+                        <div class="desc">${p.desc || ''}</div>
+                        <div class="price">RM ${p.price} / ${p.unit}</div>
+                    </div>
+                    <a href="https://wa.me/${PHONE}?text=Salam, saya nak order ${p.name}." class="btn-buy" target="_blank">Beli 📲</a>
                 </div>
-                <button class="btn-del" onclick="delProduct(${i})">HAPUS</button>
-            </div>
-        `).join('');
-    }
-
-    function addProduct() {
-        const name = document.getElementById('p-name').value;
-        const price = document.getElementById('p-price').value;
-
-        if(!name || !price) return alert("Sila isi nama dan harga.");
-
-        products.push({
-            id: Date.now(),
-            name, 
-            desc: document.getElementById('p-desc').value,
-            price: parseFloat(price),
-            unit: document.getElementById('p-unit').value,
-            img: currentBase64 || "https://via.placeholder.com/150"
-        });
-        
-        saveToGitHub();
-    }
-
-    function delProduct(index) {
-        if(confirm("Padam?")) { products.splice(index, 1); saveToGitHub(); }
-    }
-</script>
+            `).join('');
+        }
+        render();
+    </script>
 </body>
 </html>
