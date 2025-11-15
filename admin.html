@@ -2,23 +2,44 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+
     <style>
-        body { margin:0; font-family:Arial; display:flex; background:#ecf0f1; }
+        body { margin:0; font-family:Arial; background:#ecf0f1; display:flex; }
 
         /* Sidebar */
         .sidebar {
             width:220px; background:#2c3e50; color:white; height:100vh; padding:20px;
+            position:fixed; left:0; top:0; transition:0.3s ease;
         }
         .sidebar h2 { margin-top:0; }
         .sidebar a {
-            display:block; color:white; padding:10px; text-decoration:none; margin-top:10px;
+            display:block; color:white; padding:10px; text-decoration:none; margin-top:12px;
             background:#34495e; border-radius:5px;
         }
 
+        /* Hide sidebar on mobile */
+        .sidebar.hidden { left:-250px; }
+
+        /* Top bar on mobile */
+        .topbar {
+            display:none;
+            width:100%;
+            background:#2c3e50; color:white; padding:15px;
+        }
+        .menu-btn { font-size:1.4rem; cursor:pointer; }
+
         /* Main content */
         .main {
-            flex:1; padding:20px;
+            flex:1; padding:20px; margin-left:220px;
+            width:100%;
+        }
+
+        /* Mobile main shift */
+        @media(max-width:900px){
+            .main { margin-left:0 !important; padding:15px; }
+            .topbar { display:block; }
         }
 
         /* Card */
@@ -28,8 +49,8 @@
         }
 
         input,button {
-            width:100%; padding:10px; margin-bottom:10px;
-            border-radius:5px; border:1px solid #bdc3c7;
+            width:100%; padding:12px; margin-bottom:12px;
+            border-radius:5px; border:1px solid #bdc3c7; font-size:1rem;
         }
         button { background:#27ae60; color:white; font-weight:bold; cursor:pointer; }
 
@@ -39,15 +60,27 @@
         }
 
         table { width:100%; border-collapse: collapse; background:white; }
-        th,td { padding:10px; border-bottom:1px solid #eee; }
+        th,td { padding:10px; border-bottom:1px solid #eee; text-align:left; }
         th { background:#3498db; color:white; }
+
+        /* Scrollable Table on Mobile */
+        .table-wrapper {
+            overflow-x:auto;
+            border-radius:10px;
+        }
+
         img.list-img { height:50px; border-radius:5px; }
     </style>
 </head>
 <body>
 
+<!-- Mobile Topbar -->
+<div class="topbar">
+    <span class="menu-btn" onclick="toggleSidebar()">☰ Menu</span>
+</div>
+
 <!-- Sidebar -->
-<div class="sidebar">
+<div class="sidebar hidden" id="sidebar">
     <h2>ADMIN</h2>
     <a href="index.html">🏪 Pergi Kedai</a>
     <a href="#" onclick="logout()">🚪 Logout</a>
@@ -58,34 +91,43 @@
     <h2>Urus Produk</h2>
 
     <div class="card">
-        <h3>Tambah Produk Baru</h3>
+        <h3>Tambah Produk</h3>
         <input type="text" id="p-name" placeholder="Nama Produk">
         <input type="text" id="p-desc" placeholder="Info Produk">
         <input type="number" id="p-price" placeholder="Harga (RM)">
-        <input type="text" id="p-unit" placeholder="Unit (cth: kg/biji)">
+        <input type="text" id="p-unit" placeholder="Unit (kg/biji)">
         
-        <div class="upload-box" onclick="document.getElementById('file-input').click()">Klik untuk pilih gambar</div>
+        <div class="upload-box" onclick="document.getElementById('file-input').click()">Klik Pilih Gambar</div>
         <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleFile(this)">
-        <img id="preview-img" style="max-height:120px; margin-top:10px; display:none;">
+        <img id="preview-img" style="max-height:120px; margin-top:10px; display:none; border-radius:10px;">
 
         <button onclick="addProduct()">+ Tambah Produk</button>
     </div>
 
     <div class="card">
         <h3>Senarai Produk</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Gambar</th><th>Nama</th><th>Harga</th><th>Unit</th><th>Padam</th>
-                </tr>
-            </thead>
-            <tbody id="product-list"></tbody>
-        </table>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Gambar</th><th>Nama</th><th>Harga</th><th>Unit</th><th>Padam</th>
+                    </tr>
+                </thead>
+                <tbody id="product-list"></tbody>
+            </table>
+        </div>
     </div>
 
     <div id="msg" style="display:none; font-weight:bold; color:#c0392b;">Sedang Proses...</div>
 </div>
 
+<script>
+function toggleSidebar(){
+    document.getElementById("sidebar").classList.toggle("hidden");
+}
+</script>
+
 <script src="admin.js"></script>
+
 </body>
 </html>
