@@ -3,267 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin V2 - Edit Produk & Gambar</title>
+    <title>Admin Panel - Borneo Fruits</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #2c3e50; color: #333; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; max-width: 800px; margin: 0 auto; color: #333; }
         
-        h2 { border-bottom: 3px solid #27ae60; padding-bottom: 10px; color: #2c3e50; display: flex; justify-content: space-between; }
-        .status { font-size: 0.9rem; color: #666; font-weight: normal; }
+        /* Login Screen */
+        .login-box { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; margin-top: 50px; }
+        .app-box { display: none; } /* Sorok sebelum login */
 
-        /* Form Styles */
-        .form-box { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px; }
-        .grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        .full-width { grid-column: span 2; }
+        h2 { color: #2c3e50; margin-bottom: 20px; }
         
-        label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: #555; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
         input:focus { outline: 2px solid #27ae60; border-color: transparent; }
 
-        /* Buttons */
-        button { cursor: pointer; padding: 12px 20px; border: none; border-radius: 5px; font-weight: bold; transition: 0.2s; }
-        .btn-save { background: #27ae60; color: white; width: 100%; font-size: 1rem; }
-        .btn-save:hover { background: #219150; }
-        
-        .btn-cancel { background: #95a5a6; color: white; width: 100%; display: none; } /* Hidden by default */
+        button { width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: 0.2s; }
+        .btn-login { background: #2c3e50; color: white; }
+        .btn-save { background: #27ae60; color: white; margin-top: 10px; }
+        .btn-del { background: #c0392b; color: white; width: auto; padding: 6px 12px; font-size: 0.8rem; float: right; }
+        .btn-logout { background: #95a5a6; color: white; width: auto; padding: 8px 15px; font-size: 0.9rem; }
 
-        .btn-copy { background: #f39c12; color: white; margin-top: 10px; width: 100%; }
+        .product-item { background: white; padding: 20px; margin-bottom: 15px; border-radius: 10px; border-left: 6px solid #27ae60; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .loading { color: #e67e22; font-weight: bold; text-align: center; display: none; margin: 10px 0; }
         
-        .btn-action { padding: 6px 12px; font-size: 0.85rem; margin-right: 5px; }
-        .btn-edit { background: #3498db; color: white; }
-        .btn-del { background: #e74c3c; color: white; }
-
-        /* Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; vertical-align: middle; }
-        th { background: #ecf0f1; color: #2c3e50; }
-        tr:hover { background: #f1f1f1; }
-        
-        .img-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
-
-        .code-box { background: #222; color: #0f0; width: 100%; height: 150px; font-family: monospace; padding: 15px; margin-top: 20px; border-radius: 5px; resize: vertical; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>
-        <span>1. Pengurusan Produk</span>
-        <span class="status" id="mode-status">Mod: Tambah Baru</span>
-    </h2>
-    
-    <div class="form-box">
-        <input type="hidden" id="edit-id">
-
-        <div class="grid-form">
-            <div class="full-width">
-                <label>Nama Produk</label>
-                <input type="text" id="i-name" placeholder="Cth: Buah Terap (Grade A)">
-            </div>
-            
-            <div class="full-width">
-                <label>Penerangan Ringkas</label>
-                <input type="text" id="i-desc" placeholder="Cth: Isi tebal, manis melekat">
-            </div>
-
-            <div>
-                <label>Harga (RM)</label>
-                <input type="number" id="i-price" placeholder="0.00">
-            </div>
-
-            <div>
-                <label>Unit Jualan</label>
-                <input type="text" id="i-unit" placeholder="kg / biji / kotak">
-            </div>
-
-            <div>
-                <label>Kategori</label>
-                <select id="i-tag">
-                    <option value="Tempatan">Tempatan (Sabah)</option>
-                    <option value="Import">Import</option>
-                    <option value="Borong">Pek Borong</option>
-                </select>
-            </div>
-
-            <div>
-                <label>Link Gambar (URL)</label>
-                <input type="text" id="i-img" placeholder="https://..." onchange="previewImage(this.value)">
-            </div>
-        </div>
-
-        <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-            <img id="form-preview" src="" style="display: none; width: 60px; height: 60px; object-fit: cover; border-radius: 5px; border: 2px solid #27ae60;">
-            <span id="preview-text" style="font-size: 0.8rem; color: #888;">Preview gambar akan keluar di sini</span>
-        </div>
-
-        <div style="display: flex; gap: 10px;">
-            <button class="btn-save" id="btn-save" onclick="saveProduct()">+ Tambah Produk</button>
-            <button class="btn-cancel" id="btn-cancel" onclick="resetForm()">Batal Edit</button>
-        </div>
+    <div id="login-screen" class="login-box">
+        <h2>🔐 Login Admin</h2>
+        <p style="margin-bottom: 20px; color: #666;">Masukkan Token GitHub Anda</p>
+        <input type="password" id="github-token" placeholder="Paste token ghp_... di sini">
+        <button class="btn-login" onclick="login()">MASUK SISTEM</button>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th width="60">Gambar</th>
-                <th>Maklumat Produk</th>
-                <th width="150">Tindakan</th>
-            </tr>
-        </thead>
-        <tbody id="table-body"></tbody>
-    </table>
+    <div id="app-screen" class="app-box">
+        <div class="header-bar">
+            <h2>📦 Pengurusan Stok</h2>
+            <button class="btn-logout" onclick="logout()">Keluar</button>
+        </div>
+        
+        <div style="background:white; padding:20px; border-radius:12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom:30px;">
+            <h3 style="margin-top:0;">Tambah Produk Baru</h3>
+            <input type="text" id="p-name" placeholder="Nama Produk (Contoh: Buah Terap)">
+            <input type="text" id="p-desc" placeholder="Penerangan (Contoh: Manis, Gred A)">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                <input type="number" id="p-price" placeholder="Harga (RM)">
+                <input type="text" id="p-unit" placeholder="Unit (kg / biji / kotak)">
+            </div>
+            <input type="text" id="p-img" placeholder="Link Gambar URL (Boleh kosongkan)">
+            <button class="btn-save" onclick="addProduct()">+ TAMBAH KE WEBSITE</button>
+        </div>
 
-    <h2 style="margin-top: 40px;">2. Kod Untuk Website</h2>
-    <p>Bila dah siap edit, klik copy dan paste dalam <code>index.html</code>.</p>
-    <textarea id="output-code" class="code-box" readonly></textarea>
-    <button class="btn-copy" onclick="copyCode()">COPY SEMUA KOD</button>
-</div>
+        <div id="loading-msg" class="loading">🔄 Sedang menghubungi GitHub... Tunggu sebentar.</div>
+        
+        <h3>Senarai Produk Semasa</h3>
+        <div id="product-list"></div>
+    </div>
 
 <script>
-    // --- DATA MULA (Paste data lama anda di sini jika mahu sambung kerja) ---
-    let products = [
-        { 
-            "id": 1, 
-            "name": "Buah Terap", 
-            "desc": "Manis, Lembut", 
-            "price": 18, 
-            "unit": "biji", 
-            "tag": "Tempatan", 
-            "image": "https://via.placeholder.com/150" 
-        }
-    ];
-    // ------------------------------------------------------------------------
+    // --- KONFIGURASI TUAN (DAH SIAP) ---
+    const GITHUB_USERNAME = "kamkikorich"; 
+    const REPO_NAME = "borneoHubFruit";    
+    const FILE_PATH = "stok.js";
+    // -----------------------------------
 
-    let editMode = false;
+    let products = [];
+    let fileSha = ""; 
 
-    function render() {
-        const tbody = document.getElementById('table-body');
-        tbody.innerHTML = products.map((p) => `
-            <tr>
-                <td><img src="${p.image}" class="img-preview" onerror="this.src='https://via.placeholder.com/50?text=X'"></td>
-                <td>
-                    <strong>${p.name}</strong> <span style="font-size:0.8rem; color:#27ae60; border:1px solid #27ae60; padding:0 4px; border-radius:4px;">${p.tag}</span><br>
-                    RM${p.price} / ${p.unit}<br>
-                    <small style="color:#777">${p.desc}</small>
-                </td>
-                <td>
-                    <button class="btn-action btn-edit" onclick="editItem(${p.id})">✏️ Edit</button>
-                    <button class="btn-action btn-del" onclick="delItem(${p.id})">🗑️ Buang</button>
-                </td>
-            </tr>
-        `).join('');
-
-        generateCode();
+    // Auto-Login jika token masih ada
+    if(sessionStorage.getItem('gh_token')) {
+        document.getElementById('github-token').value = sessionStorage.getItem('gh_token');
+        login();
     }
 
-    function saveProduct() {
-        const id = document.getElementById('edit-id').value;
-        const name = document.getElementById('i-name').value;
-        const desc = document.getElementById('i-desc').value;
-        const price = parseFloat(document.getElementById('i-price').value);
-        const unit = document.getElementById('i-unit').value;
-        const tag = document.getElementById('i-tag').value;
-        const img = document.getElementById('i-img').value || "https://via.placeholder.com/300?text=No+Image";
+    function login() {
+        const token = document.getElementById('github-token').value.trim();
+        if(!token.startsWith("ghp_")) {
+            alert("Token tidak sah! Mesti bermula dengan 'ghp_'");
+            return;
+        }
+        
+        sessionStorage.setItem('gh_token', token);
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app-screen').style.display = 'block';
+        loadFromGitHub();
+    }
 
-        if(!name || !price) { alert('Sila isi Nama dan Harga!'); return; }
+    function logout() {
+        sessionStorage.removeItem('gh_token');
+        location.reload();
+    }
 
-        if (editMode) {
-            // UPDATE PRODUK LAMA
-            const index = products.findIndex(p => p.id == id);
-            if(index !== -1) {
-                products[index] = { id: parseInt(id), name, desc, price, unit, tag, image: img };
-            }
-        } else {
-            // TAMBAH PRODUK BARU
-            products.push({
-                id: Date.now(),
-                name, desc, price, unit, tag, image: img
+    async function loadFromGitHub() {
+        showLoading(true);
+        const token = sessionStorage.getItem('gh_token');
+        const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
+
+        try {
+            const response = await fetch(url, {
+                headers: { 'Authorization': `token ${token}` }
             });
-        }
-
-        resetForm();
-        render();
-    }
-
-    function editItem(id) {
-        const p = products.find(item => item.id === id);
-        if(p) {
-            // Masukkan data ke dalam form
-            document.getElementById('edit-id').value = p.id;
-            document.getElementById('i-name').value = p.name;
-            document.getElementById('i-desc').value = p.desc;
-            document.getElementById('i-price').value = p.price;
-            document.getElementById('i-unit').value = p.unit;
-            document.getElementById('i-tag').value = p.tag;
-            document.getElementById('i-img').value = p.image;
             
-            // Tukar butang jadi 'Update'
-            editMode = true;
-            document.getElementById('btn-save').innerText = "💾 Simpan Perubahan";
-            document.getElementById('btn-save').style.background = "#3498db"; // Warna Biru
-            document.getElementById('btn-cancel').style.display = "block";
-            document.getElementById('mode-status').innerText = "Mod: Sedang Mengedit";
-            document.getElementById('mode-status').style.color = "#3498db";
+            if(response.status === 404) {
+                // Fail belum wujud, kita mula dengan kosong
+                products = [];
+                renderList();
+                showLoading(false);
+                return;
+            }
 
-            previewImage(p.image);
+            if(!response.ok) throw new Error("Gagal login. Semak Token anda.");
+
+            const data = await response.json();
+            fileSha = data.sha; 
+            const content = atob(data.content); // Decode Base64
             
-            // Scroll ke atas supaya nampak form
-            window.scrollTo(0,0);
+            // Bersihkan string untuk dapatkan JSON
+            const jsonString = content.replace("const products =", "").replace(";", "").trim();
+            products = JSON.parse(jsonString);
+            
+            renderList();
+        } catch (err) {
+            alert("Ralat: " + err.message);
+            logout();
+        } finally {
+            showLoading(false);
         }
     }
 
-    function delItem(id) {
-        if(confirm("Betul mahu buang produk ini?")) {
-            products = products.filter(p => p.id !== id);
-            render();
-        }
-    }
+    async function saveToGitHub() {
+        showLoading(true);
+        const token = sessionStorage.getItem('gh_token');
+        const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
 
-    function resetForm() {
-        document.getElementById('edit-id').value = '';
-        document.getElementById('i-name').value = '';
-        document.getElementById('i-desc').value = '';
-        document.getElementById('i-price').value = '';
-        document.getElementById('i-unit').value = '';
-        document.getElementById('i-img').value = '';
+        const newContent = `const products = ${JSON.stringify(products, null, 4)};`;
+        const encodedContent = btoa(newContent);
+
+        const bodyData = {
+            message: "Update stok via Admin Panel",
+            content: encodedContent
+        };
         
-        // Reset butang jadi 'Tambah'
-        editMode = false;
-        document.getElementById('btn-save').innerText = "+ Tambah Produk";
-        document.getElementById('btn-save').style.background = "#27ae60"; // Warna Hijau
-        document.getElementById('btn-cancel').style.display = "none";
-        document.getElementById('mode-status').innerText = "Mod: Tambah Baru";
-        document.getElementById('mode-status').style.color = "#666";
-        
-        document.getElementById('form-preview').style.display = 'none';
-        document.getElementById('preview-text').style.display = 'block';
-    }
+        if(fileSha) bodyData.sha = fileSha; // Wajib ada SHA kalau fail dah wujud
 
-    function previewImage(url) {
-        const img = document.getElementById('form-preview');
-        const txt = document.getElementById('preview-text');
-        if(url) {
-            img.src = url;
-            img.style.display = 'block';
-            txt.style.display = 'none';
-        } else {
-            img.style.display = 'none';
-            txt.style.display = 'block';
+        try {
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bodyData)
+            });
+
+            if(!response.ok) throw new Error("Gagal simpan!");
+            
+            const data = await response.json();
+            fileSha = data.content.sha;
+            alert("✅ Berjaya! Stok dikemaskini.");
+        } catch (err) {
+            alert("Error: " + err.message);
+        } finally {
+            showLoading(false);
         }
     }
 
-    function generateCode() {
-        const json = JSON.stringify(products, null, 4);
-        document.getElementById('output-code').value = `const products = ${json};`;
+    function renderList() {
+        const listDiv = document.getElementById('product-list');
+        if(products.length === 0) {
+            listDiv.innerHTML = "<p style='text-align:center; color:#777;'>Tiada produk lagi.</p>";
+            return;
+        }
+
+        listDiv.innerHTML = products.map((p, i) => `
+            <div class="product-item">
+                <div style="display:flex; justify-content:space-between; align-items:start;">
+                    <div>
+                        <strong style="font-size:1.1rem;">${p.name}</strong>
+                        <div style="color:#555;">RM ${p.price} / ${p.unit}</div>
+                        <small style="color:#888;">${p.desc}</small>
+                    </div>
+                    <button class="btn-del" onclick="delProduct(${i})">HAPUS</button>
+                </div>
+            </div>
+        `).join('');
     }
 
-    function copyCode() {
-        document.getElementById('output-code').select();
-        document.execCommand('copy');
-        alert('Kod berjaya disalin! Sila paste dalam index.html');
+    function addProduct() {
+        const name = document.getElementById('p-name').value;
+        const price = document.getElementById('p-price').value;
+        
+        if(!name || !price) return alert("Sila isi Nama dan Harga sekurang-kurangnya.");
+
+        products.push({
+            id: Date.now(),
+            name: name,
+            desc: document.getElementById('p-desc').value,
+            price: parseFloat(price),
+            unit: document.getElementById('p-unit').value,
+            img: document.getElementById('p-img').value || "https://via.placeholder.com/150"
+        });
+
+        // Kosongkan form
+        document.getElementById('p-name').value = "";
+        document.getElementById('p-desc').value = "";
+        document.getElementById('p-price').value = "";
+        
+        renderList();
+        saveToGitHub(); 
     }
 
-    render(); // Mula
+    function delProduct(index) {
+        if(confirm("Anda pasti mahu padam produk ini?")) {
+            products.splice(index, 1);
+            renderList();
+            saveToGitHub();
+        }
+    }
+
+    function showLoading(isLoading) {
+        document.getElementById('loading-msg').style.display = isLoading ? 'block' : 'none';
+    }
 </script>
 
 </body>
