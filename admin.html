@@ -1,163 +1,75 @@
 <!DOCTYPE html>
-<html lang="ms">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin V4 (Safe)</title>
-    <style>
-        body { font-family: sans-serif; padding: 20px; background: #f0f2f5; }
-        .login-box { background: white; padding: 30px; text-align: center; margin-top: 50px; border-radius: 10px; }
-        .app-box { display: none; }
-        input { width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box; }
-        button { padding: 10px; width: 100%; cursor: pointer; background: #27ae60; color: white; border: none; font-weight: bold; }
-        .upload-btn { border: 2px dashed #ccc; padding: 20px; text-align: center; background: white; cursor: pointer; margin-bottom: 10px; }
-    </style>
-</head>
-<body>
-    <div id="login-screen" class="login-box">
-        <h2>Login Admin</h2>
-        <input type="password" id="github-token" placeholder="GitHub Token">
-        <button onclick="login()">MASUK</button>
-    </div>
+});
 
-    <div id="app-screen" class="app-box">
-        <div style="display:flex; justify-content:space-between;">
-            <h2>Urus Stok</h2>
-            <button onclick="logout()" style="width:auto; background:#c0392b;">Keluar</button>
-        </div>
-        <br>
-        <div style="background:white; padding:20px; border-radius:10px;">
-            <input type="text" id="p-name" placeholder="Nama Produk">
-            <input type="text" id="p-desc" placeholder="Info">
-            <input type="number" id="p-price" placeholder="Harga">
-            <input type="text" id="p-unit" placeholder="Unit (kg/biji)">
-            
-            <div class="upload-btn" onclick="document.getElementById('file-input').click()">
-                📷 Klik Pilih Gambar
-                <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleFile(this)">
-            </div>
-            <img id="preview-img" style="max-height:100px; display:none;">
-            
-            <button onclick="addProduct()">+ SIMPAN</button>
-        </div>
-        <div id="msg" style="color:orange; display:none;">Sedang proses...</div>
-        <div id="product-list"></div>
-    </div>
 
-<script>
-    const GITHUB_USERNAME = "kamkikorich"; 
-    const REPO_NAME = "borneoHubFruit";    
-    const FILE_PATH = "stok.js";
+if(!response.ok) throw new Error("Gagal Upload");
 
-    let products = [];
-    let fileSha = ""; 
-    let currentBase64 = ""; 
 
-    if(sessionStorage.getItem('gh_token')) { document.getElementById('github-token').value = sessionStorage.getItem('gh_token'); login(); }
+const data = await response.json();
+fileSha = data.content.sha;
+alert("Berjaya!");
+location.reload();
+}
+catch(err) { alert(err.message); }
+finally { document.getElementById('msg').style.display = 'none'; }
+}
 
-    function login() {
-        const token = document.getElementById('github-token').value.trim();
-        if(!token) return alert("Token?");
-        sessionStorage.setItem('gh_token', token);
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('app-screen').style.display = 'block';
-        loadFromGitHub();
-    }
-    
-    function logout() { sessionStorage.removeItem('gh_token'); window.location.href = "index.html"; }
 
-    function handleFile(input) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const MAX_WIDTH = 400; 
-                const scaleSize = MAX_WIDTH / img.width;
-                canvas.width = MAX_WIDTH;
-                canvas.height = img.height * scaleSize;
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                currentBase64 = canvas.toDataURL('image/jpeg', 0.6);
-                document.getElementById('preview-img').src = currentBase64;
-                document.getElementById('preview-img').style.display = 'block';
-            }
-        }
-        reader.readAsDataURL(file);
-    }
+function renderList() {
+document.getElementById('product-list').innerHTML = products.map((p, i) => `
+<div style="background:white; padding:10px; margin-bottom:8px; border:1px solid #ddd;
+display:flex; justify-content:space-between; align-items:center;">
 
-    async function loadFromGitHub() {
-        document.getElementById('msg').style.display = 'block';
-        const token = sessionStorage.getItem('gh_token');
-        const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
-        try {
-            const response = await fetch(url, { headers: { 'Authorization': `token ${token}` } });
-            if(response.status === 404) { products = []; renderList(); return; }
-            const data = await response.json();
-            fileSha = data.sha; 
-            const rawContent = atob(data.content);
-            const firstBracket = rawContent.indexOf('[');
-            const lastBracket = rawContent.lastIndexOf(']');
-            if (firstBracket !== -1 && lastBracket !== -1) {
-                products = JSON.parse(rawContent.substring(firstBracket, lastBracket + 1));
-            } else { products = []; }
-            renderList();
-        } catch (err) { alert(err.message); } 
-        finally { document.getElementById('msg').style.display = 'none'; }
-    }
 
-    async function saveToGitHub() {
-        document.getElementById('msg').style.display = 'block';
-        document.getElementById('msg').innerText = "Upload...";
-        const token = sessionStorage.getItem('gh_token');
-        const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
-        const newContent = `const products = ${JSON.stringify(products, null, 4)};`;
-        const encodedContent = btoa(unescape(encodeURIComponent(newContent)));
-        const bodyData = { message: "Update", content: encodedContent };
-        if(fileSha) bodyData.sha = fileSha; 
-        try {
-            const response = await fetch(url, {
-                method: 'PUT',
-                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify(bodyData)
-            });
-            if(!response.ok) throw new Error("Gagal");
-            const data = await response.json();
-            fileSha = data.content.sha;
-            alert("OK!");
-            location.reload();
-        } catch (err) { alert(err.message); } 
-        finally { document.getElementById('msg').style.display = 'none'; }
-    }
+<div>
+<strong>${p.name}</strong><br>
+<span style="font-size:0.9rem; color:#777;">RM ${p.price} • ${p.unit}</span>
+</div>
 
-    function renderList() {
-        document.getElementById('product-list').innerHTML = products.map((p, i) => `
-            <div style="background:white; padding:10px; margin-bottom:5px; border:1px solid #ddd; display:flex; align-items:center; justify-content:space-between;">
-                <strong>${p.name}</strong>
-                <button onclick="delProduct(${i})" style="background:red; width:auto;">X</button>
-            </div>
-        `).join('');
-    }
 
-    function addProduct() {
-        const name = document.getElementById('p-name').value;
-        const price = document.getElementById('p-price').value;
-        if(!name || !price) return alert("Isi nama & harga");
+<button onclick="delProduct(${i})" style="width:auto; background:red;">Padam</button>
+</div>
+`).join('');
+}
 
-        products.push({
-            id: Date.now(),
-            name, 
-            desc: document.getElementById('p-desc').value,
-            price: parseFloat(price),
-            unit: document.getElementById('p-unit').value,
-            img: currentBase64 || "" // Guna KOSONG, bukan link placeholder
-        });
-        saveToGitHub();
-    }
 
-    function delProduct(i) { if(confirm("Padam?")) { products.splice(i, 1); saveToGitHub(); } }
+function addProduct() {
+const name = document.getElementById('p-name').value.trim();
+const price = document.getElementById('p-price').value.trim();
+
+
+if(!name || !price) return alert("Isi nama & harga");
+
+
+products.push({
+id: Date.now(),
+name,
+desc: document.getElementById('p-desc').value,
+price: parseFloat(price),
+unit: document.getElementById('p-unit').value,
+img: currentBase64
+});
+
+
+// reset form
+document.getElementById('p-name').value = "";
+document.getElementById('p-desc').value = "";
+document.getElementById('p-price').value = "";
+document.getElementById('p-unit').value = "";
+document.getElementById('preview-img').style.display = "none";
+currentBase64 = "";
+
+
+saveToGitHub();
+}
+
+
+function delProduct(i) {
+if(confirm("Padam item ini?")) {
+products.splice(i, 1);
+saveToGitHub();
+}
+}
 </script>
 </body>
 </html>
