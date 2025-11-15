@@ -2,18 +2,30 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kedai Buah BorneoHub</title>
     <style>
         body { font-family: Arial, sans-serif; background:#f5f6fa; margin:0; }
-        header { background:#2ecc71; padding:15px; color:white; display:flex; justify-content:space-between; align-items:center; }
-        header h2 { margin:0; }
-        header a { color:white; font-weight:bold; text-decoration:none; }
-        .container { padding:20px; }
+        header {
+            background:#2ecc71; padding:15px; color:white;
+            display:flex; justify-content:space-between; align-items:center;
+        }
+        header h2 { margin:0; font-size:1.3rem; }
+        header a { color:white; font-weight:bold; text-decoration:none; font-size:0.9rem; }
+
+        .container { padding:15px; }
+
         .product-card {
-            background:white; border-radius:10px; padding:15px; margin-bottom:15px;
+            background:white; border-radius:10px; padding:10px; margin-bottom:15px;
             display:flex; gap:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);
         }
-        img { width:120px; border-radius:8px; }
+        img { width:100px; border-radius:8px; }
+
+        /* Mobile */
+        @media(max-width:600px){
+            .product-card { flex-direction:column; text-align:center; }
+            img { width:70%; margin:auto; }
+        }
     </style>
 </head>
 <body>
