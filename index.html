@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BorneoShop | Buah Sabah</title>
     <style>
-        /* --- SHOPEE STYLE CSS --- */
         :root {
             --shopee-orange: #ee4d2d;
             --shopee-bg: #f5f5f5;
@@ -13,50 +12,40 @@
             --text-grey: #757575;
         }
 
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; background: var(--shopee-bg); padding-bottom: 70px; }
+        body { font-family: sans-serif; margin: 0; background: var(--shopee-bg); padding-bottom: 70px; }
         
-        /* Header Shopee Style */
-        header { background: var(--shopee-orange); color: white; padding: 10px 15px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .search-bar { background: white; border-radius: 2px; padding: 10px; flex-grow: 1; color: #ee4d2d; font-size: 0.9rem; font-weight:bold;}
-        .cart-icon { font-size: 1.5rem; }
-
-        /* Kategori/Filter */
-        .categories { display: flex; overflow-x: auto; background: white; padding: 10px; gap: 15px; margin-bottom: 10px; }
-        .cat-item { text-align: center; min-width: 60px; font-size: 0.8rem; color: var(--text-grey); }
-        .cat-icon { width: 45px; height: 45px; border: 1px solid #eee; border-radius: 15px; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        /* Header */
+        header { background: var(--shopee-orange); color: white; padding: 10px 15px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 10px; }
+        .search-bar { background: white; border-radius: 2px; padding: 8px 10px; flex-grow: 1; color: #ee4d2d; font-size: 0.9rem; font-weight:bold;}
 
         /* Grid Produk */
-        .section-title { padding: 15px; background: white; color: var(--shopee-orange); font-weight: bold; border-bottom: 1px solid #eee; text-transform: uppercase; font-size: 0.9rem; margin-top: 10px; position: sticky; top: 60px; z-index: 90;}
-        
         .container { max-width: 600px; margin: 0 auto; }
+        .section-title { padding: 15px; background: white; color: var(--shopee-orange); font-weight: bold; border-bottom: 1px solid #eee; text-transform: uppercase; font-size: 0.9rem; margin-top: 10px; position: sticky; top: 50px; z-index: 90;}
         .product-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px; }
         
-        /* Kad Produk Shopee */
-        .card { background: white; border-radius: 2px; overflow: hidden; transition: transform 0.1s; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.1); cursor: pointer; height: 100%; display: flex; flex-direction: column;}
-        .card:active { opacity: 0.8; }
+        /* Kad Produk */
+        .card { background: white; border-radius: 2px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.1); cursor: pointer; height: 100%; display: flex; flex-direction: column; text-decoration: none; color: inherit;}
         
-        .card img { width: 100%; height: 150px; object-fit: cover; background: #fafafa; }
+        /* Ganti Placeholder dengan kotak kelabu simple */
+        .img-box { width: 100%; height: 150px; background: #e0e0e0; display: flex; align-items: center; justify-content: center; color: #888; font-size: 0.8rem; overflow: hidden;}
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
         .card-body { padding: 8px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .p-name { font-size: 0.9rem; color: var(--text-black); margin-bottom: 5px; line-height: 1.2em; height: 2.4em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        
+        .p-name { font-size: 0.9rem; color: var(--text-black); margin-bottom: 5px; line-height: 1.2em; height: 2.4em; overflow: hidden; }
         .tags { display: flex; gap: 5px; margin-bottom: 5px; }
         .tag-local { background: #ee4d2d; color: white; font-size: 0.6rem; padding: 2px 4px; border-radius: 2px; }
-        .tag-ship { border: 1px solid #00bfa5; color: #00bfa5; font-size: 0.6rem; padding: 1px 4px; }
-
+        
         .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 5px; }
         .p-price { color: var(--shopee-orange); font-weight: 500; font-size: 1rem; }
-        .p-price small { font-size: 0.7rem; }
         .p-sold { font-size: 0.7rem; color: var(--text-grey); }
 
-        /* Bottom Nav Bar */
+        /* Bottom Nav */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #eee; display: flex; justify-content: space-around; padding: 8px 0; z-index: 100; max-width: 600px; margin: 0 auto; left: 0; right: 0;}
-        .nav-item { text-align: center; font-size: 0.7rem; color: var(--text-grey); flex: 1; cursor: pointer;}
-        .nav-item.active { color: var(--shopee-orange); }
+        .nav-item { text-align: center; font-size: 0.7rem; color: var(--text-grey); flex: 1; cursor: pointer; text-decoration: none;}
         .nav-icon { font-size: 1.4rem; display: block; margin-bottom: 2px; }
-
-        /* Link WhatsApp Halus */
-        .card-link { text-decoration: none; color: inherit; display: block; height: 100%; }
+        
+        /* Butang Admin Khas (Supaya tuan nampak) */
+        .admin-btn { color: #ee4d2d !important; font-weight: bold; }
 
     </style>
 </head>
@@ -64,73 +53,60 @@
 
 <header>
     <div class="search-bar">🔍 Borneo Fresh Fruits</div>
-    <div class="cart-icon">🛒</div>
+    <div style="font-size:1.5rem;">🛒</div>
 </header>
 
-<div class="categories">
-    <div class="cat-item"><div class="cat-icon">🔥</div>Laris</div>
-    <div class="cat-item"><div class="cat-icon">🍍</div>Lokal</div>
-    <div class="cat-item"><div class="cat-icon">🚚</div>Borong</div>
-    <div class="cat-item"><div class="cat-icon">🍎</div>Import</div>
-    <div class="cat-item"><div class="cat-icon">🎫</div>Voucher</div>
-</div>
-
 <div class="container">
-    <div class="section-title">REKOMENDASI UNTUK ANDA</div>
+    <div class="section-title">🔥 STOK TERKINI</div>
     <div id="list" class="product-list">
         <div style="text-align:center; width:200%; padding:20px; color:#999;">Loading...</div>
     </div>
 </div>
 
 <div class="bottom-nav">
-    <div class="nav-item active">
+    <div class="nav-item">
         <span class="nav-icon">🏠</span>Utama
     </div>
     <div class="nav-item">
         <span class="nav-icon">🎥</span>Live
     </div>
     <div class="nav-item">
-        <span class="nav-icon">🔔</span>Notifikasi
+        <span class="nav-icon">🔔</span>Noti
     </div>
     
-    <div class="nav-item" onclick="window.location.href='admin.html'">
-        <span class="nav-icon">👤</span>Saya
-    </div>
+    <a href="admin.html" class="nav-item admin-btn">
+        <span class="nav-icon">👤</span>
+        SAYA (Admin)
+    </a>
 </div>
 
 <script src="stok.js"></script>
 <script>
-    // Tukar No WhatsApp Tuan
     const PHONE_NO = "60126119542"; 
-
     const listDiv = document.getElementById('list');
 
     function render() {
         if(typeof products === 'undefined' || products.length === 0) {
-            listDiv.innerHTML = "<p style='padding:20px'>Stok sedang dikemaskini...</p>";
+            listDiv.innerHTML = "<p style='padding:20px'>Tiada stok buat masa ini.</p>";
             return;
         }
 
         listDiv.innerHTML = products.map(p => `
-            <a href="https://wa.me/${PHONE_NO}?text=Hi BorneoShop, saya nak ${p.name}" class="card-link" target="_blank">
-            <div class="card">
-                <img src="${p.img}" onerror="this.src='https://via.placeholder.com/300?text=Produk'">
+            <a href="https://wa.me/${PHONE_NO}?text=Hi, saya nak ${p.name}" class="card" target="_blank">
+                <div class="img-box">
+                    ${p.img ? `<img src="${p.img}" onerror="this.style.display='none';this.parentElement.innerText='Tiada Gambar'">` : 'Tiada Gambar'}
+                </div>
                 <div class="card-body">
                     <div class="p-name">${p.name}</div>
-                    <div class="tags">
-                        <span class="tag-local">Local Stock</span>
-                        <span class="tag-ship">Free Shipping</span>
-                    </div>
+                    <div class="tags"><span class="tag-local">Local Stock</span></div>
                     <div class="price-row">
                         <div class="p-price"><small>RM</small>${p.price}</div>
-                        <div class="p-sold">1.2k sold</div>
+                        <div class="p-sold">Sold 12</div>
                     </div>
                 </div>
-            </div>
             </a>
         `).join('');
     }
-
     render();
 </script>
 
