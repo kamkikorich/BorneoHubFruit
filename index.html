@@ -7,10 +7,10 @@
     <style>
         /* --- TEMA PREMIUM --- */
         :root {
-            --primary-dark: #0F5132;  /* Hijau Gelap (Profesional) */
-            --primary-light: #198754; /* Hijau Terang (Button) */
-            --accent: #FFC107;        /* Kuning Emas (Highlight) */
-            --bg: #F3F4F6;            /* Kelabu Lembut */
+            --primary-dark: #0F5132;  
+            --primary-light: #198754; 
+            --accent: #FFC107;        
+            --bg: #F3F4F6;            
             --card-bg: #FFFFFF;
             --text-main: #1F2937;
             --text-muted: #6B7280;
@@ -25,7 +25,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* HERO SECTION (Header Professional) */
+        /* HERO SECTION */
         .hero {
             background-color: var(--primary-dark);
             color: white;
@@ -45,7 +45,6 @@
             font-weight: bold;
         }
 
-        /* COPYWRITING PILIHAN A */
         .hero-title {
             font-size: 1.5rem;
             font-weight: 800;
@@ -58,15 +57,15 @@
             margin: 0;
             font-weight: 300;
             max-width: 500px;
-            margin: 0 auto; /* Center text */
+            margin: 0 auto;
         }
 
-        /* TRUST BAR (Icon Jaminan) */
+        /* TRUST BAR */
         .trust-bar {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-top: -20px; /* Naik ke atas sikit */
+            margin-top: -20px; 
             padding: 0 15px;
         }
         .trust-badge {
@@ -93,7 +92,7 @@
             letter-spacing: 1px;
         }
 
-        /* KAD PRODUK (Style Premium) */
+        /* KAD PRODUK */
         .card {
             background: var(--card-bg);
             border-radius: 12px;
@@ -108,13 +107,31 @@
         }
         .card:active { transform: scale(0.98); background-color: #fafafa; }
 
-        .card-img {
+        /* Bekas Gambar (Supaya nampak kemas walau gambar rosak) */
+        .img-wrapper {
             width: 80px;
             height: 80px;
             border-radius: 8px;
-            object-fit: cover;
-            background-color: #eee;
+            background-color: #eee; /* Warna kelabu default */
             flex-shrink: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Kalau gambar rosak, kita sorok imej dan tunjuk text ini */
+        .no-img-text {
+            font-size: 0.6rem;
+            color: #999;
+            text-align: center;
+            display: none; /* Sorok by default */
         }
 
         .card-info {
@@ -203,7 +220,11 @@
 
             listDiv.innerHTML = products.map(p => `
                 <div class="card" onclick="window.open('https://wa.me/${PHONE_NO}?text=Salam, saya berminat dengan ${p.name} (RM${p.price})', '_blank')">
-                    <img src="${p.img}" class="card-img" onerror="this.src='https://via.placeholder.com/150?text=No+Img'">
+                    
+                    <div class="img-wrapper">
+                         <span class="no-img-text">Tiada<br>Gambar</span>
+                         <img src="${p.img}" class="card-img" onerror="this.style.display='none'; this.previousElementSibling.style.display='block'">
+                    </div>
                     
                     <div class="card-info">
                         <div class="p-name">${p.name}</div>
